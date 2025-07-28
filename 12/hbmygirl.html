@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>hb my girl</title>
+  <link rel="icon" href="src/icon.ico" type="image/x-icon" />
+  <style>
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+    html, body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #d6d1ec, #c4bce3);
+      animation: pulseBackground 10s infinite ease-in-out;
+      color: #333;
+      overflow-x: hidden;
+    }
+    @keyframes pulseBackground {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    .centered-screen {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+      opacity: 0;
+      transform: scale(0.98);
+      transition: all 0.6s ease;
+      pointer-events: none;
+      position: absolute;
+      width: 100%;
+      top: 0;
+      left: 0;
+    }
+    .centered-screen.visible {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+      position: relative;
+    }
+    .hidden { display: none; }
+    h1, h2, p {
+      margin-bottom: 20px;
+      animation: fadeIn 1s ease forwards;
+    }
+    #startScreen h1,
+    .counter-table th, .counter-table td {
+      font-size: 1.3rem;
+      line-height: 1.3;
+      margin-bottom: 3px;
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    button {
+      padding: 12px 25px;
+      font-size: 1rem;
+      background-color: #6b5fa4;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(107, 95, 164, 0.4);
+    }
+    button:hover {
+      background-color: #554c8c;
+      transform: scale(1.05);
+    }
+    input {
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: 1px solid #aaa;
+      text-align: center;
+      margin-bottom: 10px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      width: 180px;
+      max-width: 90vw;
+    }
+    .content-box {
+      width: 100%;
+      max-width: 720px;
+      background: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 20px 15px;
+      margin-bottom: 25px;
+      animation: fadeIn 1s ease forwards;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    .content-box.extra-block {
+      padding: 15px 12px;
+      font-size: 0.85rem;
+      box-shadow: none;
+      background-color: rgba(255, 255, 255, 0.25);
+    }
+    .content-box p { margin: 0; line-height: 1.5; }
+
+    .photo-love-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      background: linear-gradient(135deg, #e8d3f8, #d2c0ec);
+      text-align: center;
+      position: relative;
+      opacity: 0;
+      transform: scale(0.98);
+      transition: all 0.6s ease;
+      pointer-events: none;
+      position: absolute;
+      width: 100%;
+      top: 0;
+      left: 0;
+    }
+    .photo-love-screen.visible {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+      position: relative;
+    }
+    .photo-love-screen h1 {
+      font-size: 1.3rem;
+      margin-bottom: 14px;
+    }
+    .infinity-svg-container {
+      width: 75px;
+      height: 37px;
+      margin: 0 0 14px 0;
+      user-select: none;
+      animation: pulseInfinity 3.5s ease-in-out infinite;
+      filter: drop-shadow(0 0 8px #a157e8cc);
+    }
+    .infinity-svg {
+      width: 100%;
+      height: 100%;
+      stroke-dasharray: 310;
+      stroke-dashoffset: 310;
+      animation: dashAnimation 4.5s ease-in-out infinite, colorPulse 3.5s ease-in-out infinite;
+      filter: drop-shadow(0 0 6px #a157e8cc);
+    }
+    @keyframes dashAnimation {
+      0% { stroke-dashoffset: 310; }
+      50% { stroke-dashoffset: 0; }
+      100% { stroke-dashoffset: 310; }
+    }
+    @keyframes colorPulse {
+      0%, 100% { stroke: #a157e8; }
+      50% { stroke: #d98cff; }
+    }
+    @keyframes pulseInfinity {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.12); opacity: 1; }
+    }
+    .photo-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+    }
+    .photo-grid img {
+      width: 70vw;
+      max-width: 220px;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      filter: drop-shadow(0 0 2px transparent);
+    }
+    .photo-grid img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+    }
+    .photo-grid img.active-glow {
+      animation: glowPulse 1.2s ease forwards;
+      filter: drop-shadow(0 0 4px #a157e899);
+      transform: scale(1.06);
+    }
+    @keyframes glowPulse {
+      0% {
+        filter: drop-shadow(0 0 2px #a157e877);
+        transform: scale(1.04);
+      }
+      50% {
+        filter: drop-shadow(0 0 10px #b86fff99);
+        transform: scale(1.08);
+      }
+      100% {
+        filter: drop-shadow(0 0 6px #a157e877);
+        transform: scale(1.06);
+      }
+    }
+
+    .table-wrapper {
+      width: 100%;
+      overflow-x: hidden;
+      display: flex;
+      justify-content: center;
+    }
+    table.counter-table {
+      border-collapse: collapse;
+      table-layout: fixed;
+      min-width: 400px;
+      transition: transform 0.3s ease;
+      border: 1px solid #aaa;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .counter-table th, .counter-table td {
+      padding: 8px 10px;
+      font-size: 1rem;
+      white-space: nowrap;
+      overflow: visible;
+      text-overflow: clip;
+      border: 1px solid #ccc;
+    }
+    .counter-table th {
+      background-color: #6b5fa4;
+      color: white;
+    }
+
+    .back-arrow {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      z-index: 999;
+    }
+    .back-arrow:hover {
+      transform: scale(1.1);
+      opacity: 1;
+    }
+
+    /* --- Первый экран --- */
+    #startScreen > div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px; /* уменьшено */
+    }
+    #startScreen button {
+      margin-top: 0;
+    }
+    #startScreen h1 {
+      white-space: nowrap;
+    }
+
+    /* --- Второй экран (после нажатия кнопки) --- */
+    #dateSection > div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px; /* уменьшено */
+      max-width: 320px;
+      margin: 0 auto;
+      padding-top: 0;
+    }
+    #dateSection h1 {
+      margin-bottom: 6px;
+      white-space: nowrap;
+      font-size: 1.3rem;
+    }
+    #dateSection p {
+      margin-bottom: 6px;
+    }
+    #dateSection input {
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Первый экран -->
+  <div id="startScreen" class="centered-screen visible">
+    <div>
+      <h1>Сегодня у тебя день рождения! <span onclick="showLoveScreen()" style="cursor: pointer;">🎂</span></h1>
+      <button onclick="showDateInput()">Жмякни</button>
+    </div>
+  </div>
+
+  <!-- Второй экран -->
+  <div id="dateSection" class="centered-screen hidden">
+    <img src="src/strelka.png" class="back-arrow" onclick="showStartScreen()" alt="Назад" />
+    <div>
+      <h1>Сегодня у тебя день рождения! 🎂</h1>
+      <p>Введи нашу дату:</p>
+      <input type="text" id="dateInput" placeholder="дд.мм.гггг" />
+      <button onclick="checkDate()">Подтвердить</button>
+    </div>
+  </div>
+
+  <!-- Третий экран -->
+  <div id="resultSection" class="centered-screen hidden">
+    <img src="src/strelka.png" class="back-arrow" onclick="showDateInput()" alt="Назад" />
+    <h1 style="font-size: 1.3rem;">Мы вместе уже:</h1>
+
+    <div class="content-box table-wrapper">
+      <table class="counter-table" aria-label="Счётчик времени вместе">
+        <thead>
+          <tr>
+            <th>Лет</th><th>Месяцев</th><th>Дней</th>
+            <th>Часов</th><th>Минут</th><th>Секунд</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="years">0</td>
+            <td id="months">0</td>
+            <td id="days">0</td>
+            <td id="hours">0</td>
+            <td id="minutes">0</td>
+            <td id="seconds">0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="content-box">
+      <p>Ты — чудо в моей жизни 💖<br/>
+         Мы вместе с <strong>15.09.2024</strong>, и я надеюсь, что это навсегда
+      </p>
+    </div>
+
+    <div class="content-box extra-block">
+      <p>Моя любимая девочка, сегодня тебе исполнилось 19 лет. За это время ты через многое прошла, и я надеюсь ты понимаешь, что в дальнейшем все счастливые моменты и все проблемы, которых, я надеюсь, будет очень мало, будут разделять нас обоих) при любой сложной ситуации, я всегда буду рядом и всегда тебе помогу. Я очень благодарен тебе что ты появилась у меня, благодаря тебе я увидел много чего нового, научился много чему новому, и надеюсь что тоже дал тебе не мало) до тебя я даже не думал, что можно настолько сильно полюбить человека, быть готовым ради него на всё, но и так бывает) я помню нашу первую встречу, первый поцелуй, и никогда это не забуду. У нас бывают ссоры, бывают разногласия, но нет ни одной пары, у которой всё идеально, над отношениями нужно работать, и несмотря ни на что у нас это получается) прости меня за то, что порой делал глупости, всё это было не специально, я очень сильно хочу чтобы моя девочка была самая самая счастливая) мы уже прошли через многое, но дальше - больше. Мы уже почти год вместе, а кажется будто только вчера познакомились, время так быстро летит, вообще не верится) я тебя очень очень очень очень сильно сильно сильно люблю, ты мне очень дорога и ты самое ценное, что у меня есть!! И я сделаю всё возможное чтобы этот день рождения тебе запомнился как самый лучший!! ❤️❤️❤️</p>
+    </div>
+
+    <div class="content-box extra-block">
+      <p>Ты кое-что упустила, вернись в самое начало и нажми на тортик) 💖</p>
+    </div>
+  </div>
+
+  <!-- Экран с фото -->
+  <div id="loveScreen" class="photo-love-screen hidden">
+    <img src="src/strelka.png" class="back-arrow" onclick="showStartScreen()" alt="Назад" />
+    <h1>Я тебя люблю! 💜</h1>
+    <div class="infinity-svg-container" aria-label="Анимированная бесконечность" role="img" >
+      <svg class="infinity-svg" viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg" >
+        <path d="
+          M20,25
+          C20,10 45,10 50,25
+          C55,40 80,40 80,25
+          C80,10 55,10 50,25
+          C45,40 20,40 20,25
+          Z
+        " fill="none" stroke="#a157e8" stroke-width="5" stroke-linecap="round" />
+      </svg>
+    </div>
+    <div class="photo-grid" role="list">
+      <img src="src/ph1.png" alt="Фото 1" role="listitem" />
+      <img src="src/ph2.png" alt="Фото 2" role="listitem" />
+      <img src="src/ph3.png" alt="Фото 3" role="listitem" />
+    </div>
+  </div>
+
+  <script>
+    const correctDate = "15.09.2024";
+
+    function hideAll() {
+      document.querySelectorAll('.centered-screen, .photo-love-screen').forEach(el => {
+        el.classList.remove('visible');
+        el.classList.add('hidden');
+      });
+    }
+
+    function showStartScreen() {
+      hideAll();
+      const el = document.getElementById("startScreen");
+      el.classList.remove('hidden');
+      setTimeout(() => el.classList.add('visible'), 20);
+    }
+
+    function showDateInput() {
+      hideAll();
+      const el = document.getElementById("dateSection");
+      el.classList.remove('hidden');
+      setTimeout(() => el.classList.add('visible'), 20);
+    }
+
+    function showResultSection() {
+      hideAll();
+      const el = document.getElementById("resultSection");
+      el.classList.remove('hidden');
+      setTimeout(() => el.classList.add('visible'), 20);
+    }
+
+    function showLoveScreen() {
+      hideAll();
+      const el = document.getElementById("loveScreen");
+      el.classList.remove('hidden');
+      setTimeout(() => el.classList.add('visible'), 20);
+    }
+
+    function checkDate() {
+      const input = document.getElementById("dateInput").value.trim();
+      if (input === correctDate) {
+        showResultSection();
+        startLiveCounter();
+      } else {
+        alert("Попробуй ещё раз! <3");
+      }
+    }
+
+    function startLiveCounter() {
+      const start = new Date(2024, 8, 15);
+      function update() {
+        const now = new Date();
+        let diff = Math.floor((now - start) / 1000);
+
+        const years = Math.floor(diff / (365.25 * 24 * 3600));
+        diff %= Math.floor(365.25 * 24 * 3600);
+        const months = Math.floor(diff / (30 * 24 * 3600));
+        diff %= 30 * 24 * 3600;
+        const days = Math.floor(diff / (24 * 3600));
+        diff %= 24 * 3600;
+        const hours = Math.floor(diff / 3600);
+        diff %= 3600;
+        const minutes = Math.floor(diff / 60);
+        const seconds = diff % 60;
+
+        document.getElementById("years").textContent = years;
+        document.getElementById("months").textContent = months;
+        document.getElementById("days").textContent = days;
+        document.getElementById("hours").textContent = hours;
+        document.getElementById("minutes").textContent = minutes;
+        document.getElementById("seconds").textContent = seconds;
+      }
+      update();
+      setInterval(update, 1000);
+    }
+
+    // Свечение на фото при клике (менее яркое)
+    document.querySelectorAll('.photo-grid img').forEach(img => {
+      img.addEventListener('click', () => {
+        document.querySelectorAll('.photo-grid img.active-glow').forEach(el => el.classList.remove('active-glow'));
+        img.classList.add('active-glow');
+        setTimeout(() => img.classList.remove('active-glow'), 1200);
+      });
+    });
+  </script>
+
+</body>
+</html>
